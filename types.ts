@@ -21,7 +21,9 @@ export enum AppScreen {
   ASSET_DETAILS = 'asset_details',
   RECOVERY_PHRASE = 'recovery_phrase',
   NETWORK_SETTINGS = 'network_settings',
-  FIAT_DASHBOARD = 'fiat_dashboard'
+  FIAT_DASHBOARD = 'fiat_dashboard',
+  EXCHANGE = 'exchange',
+  KYC = 'kyc'
 }
 
 export interface AppNotification {

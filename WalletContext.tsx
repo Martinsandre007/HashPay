@@ -15,6 +15,7 @@ interface UserProfile {
   username: string;
   avatar: string;
   address: string;
+  kycStatus?: 'unverified' | 'pending' | 'verified';
 }
 
 interface AppSettings {
@@ -66,6 +67,9 @@ interface WalletContextType {
   registerSuiProfile: (username: string, bio: string) => Promise<string | null>;
   createEscrowOnChain: (recipient: string, amount: string) => Promise<string | null>;
   afriexTransfer: (data: { amount: number, currency: string, recipient_address: string, recipient_name: string }) => Promise<void>;
+  submitKYC: (data: any) => Promise<void>;
+  onRamp: (data: any) => Promise<void>;
+  offRamp: (data: any) => Promise<void>;
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
@@ -241,7 +245,8 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     email: 'alex.mercer@hashpay.io',
     username: 'amercer_sui',
     avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC9VGYwzYN8uMNCP9CXM9GWi7ouTKj4ruwu7LjZ2-KxupQQKh-_ZiPsuf0LDDTKXHUE4hM10GBF84C50IuLgdxmwexqWYsUDcjzfagOAvrfde1xSvfVDz3YSefxx9QCGa5u8khd2tm5fVfZbQk81BRzhA8Jer3SJxITrtdGRNeOBEqeCOkWZmBzr8pMxZ163RF23O3JgyrQGh7gUYwEGsTv-68vRONVQpkBM_p9vcsQCYeayHyV75uqWBPTkDge38702-6ybOCRn-dN',
-    address: '0x71c7656ec7ab88b098defb751b7401b5f6d8976f9a2b8e390c58e6d89b8e390c'
+    address: '0x71c7656ec7ab88b098defb751b7401b5f6d8976f9a2b8e390c58e6d89b8e390c',
+    kycStatus: 'unverified'
   });
 
   const [appSettings, setAppSettings] = useState<AppSettings>({
@@ -604,6 +609,41 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     }
   };
 
+  const submitKYC = async (data: any) => {
+    if (!userId) return;
+    try {
+      await apiClient.post('/exchange/kyc', { user_id: userId, kycData: data });
+      setUserProfile(prev => ({ ...prev, kycStatus: 'pending' }));
+      showToast('KYC documents submitted!', 'success');
+    } catch (e) {
+      showToast('KYC submission failed', 'error');
+    }
+  };
+
+  const onRamp = async (data: any) => {
+    if (!userId) return;
+    try {
+      await apiClient.post('/exchange/on-ramp', { ...data, user_id: userId });
+      showToast('On-ramp successful!', 'success');
+      const userData = await apiClient.get(`/users/${userId}`);
+      if (userData.wallets) setWallets(userData.wallets);
+    } catch (e: any) {
+      showToast(e.message || 'On-ramp failed', 'error');
+    }
+  };
+
+  const offRamp = async (data: any) => {
+    if (!userId) return;
+    try {
+      await apiClient.post('/exchange/off-ramp', { ...data, user_id: userId });
+      showToast('Off-ramp initiated!', 'success');
+      const userData = await apiClient.get(`/users/${userId}`);
+      if (userData.wallets) setWallets(userData.wallets);
+    } catch (e: any) {
+      showToast(e.message || 'Off-ramp failed', 'error');
+    }
+  };
+
   return (
     <WalletContext.Provider value={{
       isAuthenticated,
@@ -645,7 +685,10 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       verifyPhrase,
       registerSuiProfile,
       createEscrowOnChain,
-      afriexTransfer
+      afriexTransfer,
+      submitKYC,
+      onRamp,
+      offRamp
     }}>
       {children}
     </WalletContext.Provider>

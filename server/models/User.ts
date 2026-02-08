@@ -7,9 +7,11 @@ interface UserAttributes {
   password_hash: string;
   name: string;
   address: string;
+  kycStatus: 'unverified' | 'pending' | 'verified';
+  kycData?: any;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'address'> { }
+interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'address' | 'kycStatus' | 'kycData'> { }
 
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
@@ -17,6 +19,8 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public password_hash!: string;
   public name!: string;
   public address!: string;
+  public kycStatus!: 'unverified' | 'pending' | 'verified';
+  public kycData?: any;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -50,6 +54,14 @@ User.init(
       allowNull: false,
       defaultValue: '0x71c7656ec7ab88b098defb751b7401b5f6d8976f9a2b8e390c58e6d89b8e390c'
     },
+    kycStatus: {
+      type: DataTypes.ENUM('unverified', 'pending', 'verified'),
+      defaultValue: 'unverified',
+    },
+    kycData: {
+      type: DataTypes.JSON,
+      allowNull: true,
+    }
   },
   {
     sequelize,

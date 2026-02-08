@@ -104,7 +104,7 @@ const DashboardScreen: FC<DashboardScreenProps> = ({ onNavigate }) => {
         <motion.section variants={itemVariants} className="px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { label: 'Buy', icon: 'add_shopping_cart', screen: AppScreen.BUY },
+              { label: 'Buy', icon: 'add_shopping_cart', screen: AppScreen.EXCHANGE },
               { label: 'Send', icon: 'north_east', screen: AppScreen.SEND },
               { label: 'Receive', icon: 'south_west', screen: AppScreen.RECEIVE },
               { label: 'Fiat', icon: 'account_balance', screen: AppScreen.FIAT_DASHBOARD }
