@@ -23,6 +23,8 @@ import AssetDetailsScreen from './screens/AssetDetailsScreen';
 import RecoveryPhraseScreen from './screens/RecoveryPhraseScreen';
 import NetworkSettingsScreen from './screens/NetworkSettingsScreen';
 import FiatDashboardScreen from './screens/FiatDashboardScreen';
+import KYCScreen from './screens/KYCScreen';
+import ExchangeScreen from './screens/ExchangeScreen';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useWallet } from './WalletContext';
 
@@ -119,6 +121,10 @@ const App: React.FC = () => {
         return <NetworkSettingsScreen onBack={() => setCurrentScreen(AppScreen.SETTINGS)} />;
       case AppScreen.FIAT_DASHBOARD:
         return <FiatDashboardScreen onBack={() => setCurrentScreen(AppScreen.DASHBOARD)} />;
+      case AppScreen.KYC:
+        return <KYCScreen onBack={() => setCurrentScreen(AppScreen.FIAT_DASHBOARD)} />;
+      case AppScreen.EXCHANGE:
+        return <ExchangeScreen onBack={() => setCurrentScreen(AppScreen.FIAT_DASHBOARD)} />;
       default:
         return <DashboardScreen onNavigate={(screen) => setCurrentScreen(screen)} />;
     }

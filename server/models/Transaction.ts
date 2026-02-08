@@ -5,27 +5,29 @@ import { User } from './User';
 interface TransactionAttributes {
   id: number;
   user_id: number;
-  type: 'sent' | 'received';
+  type: 'sent' | 'received' | 'on-ramp' | 'off-ramp';
   amount: string;
   currency: string;
   recipient: string;
   status: 'pending' | 'completed' | 'failed';
   date: Date;
   avatar?: string;
+  external_tx_id?: string;
 }
 
-interface TransactionCreationAttributes extends Optional<TransactionAttributes, 'id'> {}
+interface TransactionCreationAttributes extends Optional<TransactionAttributes, 'id' | 'external_tx_id'> { }
 
 export class Transaction extends Model<TransactionAttributes, TransactionCreationAttributes> implements TransactionAttributes {
   public id!: number;
   public user_id!: number;
-  public type!: 'sent' | 'received';
+  public type!: 'sent' | 'received' | 'on-ramp' | 'off-ramp';
   public amount!: string;
   public currency!: string;
   public recipient!: string;
   public status!: 'pending' | 'completed' | 'failed';
   public date!: Date;
   public avatar?: string;
+  public external_tx_id?: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -43,7 +45,7 @@ Transaction.init(
       allowNull: false,
     },
     type: {
-      type: DataTypes.ENUM('sent', 'received'),
+      type: DataTypes.ENUM('sent', 'received', 'on-ramp', 'off-ramp'),
       allowNull: false,
     },
     amount: {
@@ -67,6 +69,10 @@ Transaction.init(
       defaultValue: DataTypes.NOW,
     },
     avatar: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    external_tx_id: {
       type: DataTypes.STRING,
       allowNull: true,
     }

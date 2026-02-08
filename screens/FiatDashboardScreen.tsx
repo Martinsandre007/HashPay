@@ -79,6 +79,20 @@ const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => 
                         <span className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Weekly Trend</span>
                         <button className="text-[9px] font-black text-text-tertiary uppercase tracking-widest hover:text-white transition-colors">View Report</button>
                     </div>
+                    <div className="flex gap-4 mb-4">
+                        <button
+                            onClick={() => onBack()} // Should probably go to EXCHANGE
+                            className="flex-1 py-3 bg-[#22c55e]/20 border border-[#22c55e]/40 rounded-xl text-[10px] font-black uppercase tracking-widest text-[#22c55e]"
+                        >
+                            Deposit Crypto
+                        </button>
+                        <button
+                            onClick={() => onBack()} // Should probably go to EXCHANGE
+                            className="flex-1 py-3 bg-error/10 border border-error/20 rounded-xl text-[10px] font-black uppercase tracking-widest text-error"
+                        >
+                            Withdraw Fiat
+                        </button>
+                    </div>
                     <div className="flex items-end gap-3 h-24">
                         {metrics?.trend.map((val: number, i: number) => (
                             <div key={i} className="flex-1 bg-primary/20 rounded-lg relative group transition-all" style={{ height: `${val}%` }}>
@@ -237,16 +251,19 @@ const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => 
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}>
             <h2 className="text-3xl font-black font-display tracking-tight text-white mb-12">Transfer Money</h2>
 
-            <div className="grid grid-cols-3 gap-12">
-                <div className="col-span-2 flex flex-col gap-8">
+            <div className="flex flex-col lg:flex-row gap-12">
+                <div className="flex-1 lg:flex-[2] flex flex-col gap-8">
                     <div className="bg-surface-dark/30 rounded-[2.5rem] p-10 border border-white/5 glass">
                         <div className="grid grid-cols-2 gap-8 mb-8">
                             <div>
                                 <label className="text-[10px] font-black text-text-tertiary uppercase tracking-widest mb-3 block">From Account</label>
-                                <select className="w-full h-14 bg-white/5 border border-white/10 rounded-xl px-4 focus:outline-none focus:border-primary text-sm font-bold appearance-none">
-                                    <option>Checking (**** 4421)</option>
-                                    <option>Savings (**** 9012)</option>
-                                </select>
+                                <div className="relative">
+                                    <select className="w-full h-14 bg-white/5 border border-white/10 rounded-xl px-4 focus:outline-none focus:border-primary text-sm font-bold appearance-none pr-10">
+                                        <option className="bg-[#0d121b]">Checking (**** 4421)</option>
+                                        <option className="bg-[#0d121b]">Savings (**** 9012)</option>
+                                    </select>
+                                    <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-tertiary">expand_more</span>
+                                </div>
                             </div>
                             <div>
                                 <label className="text-[10px] font-black text-text-tertiary uppercase tracking-widest mb-3 block">Recipient Account / Bank</label>
@@ -271,7 +288,7 @@ const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => 
                     </div>
                 </div>
 
-                <div className="flex flex-col gap-8">
+                <div className="flex-1 flex flex-col gap-8">
                     <h3 className="text-[11px] font-black text-text-tertiary uppercase tracking-[0.3em]">Recent Recipients</h3>
                     <div className="flex flex-col gap-4">
                         {['John Boyega', 'Aisha Bello', 'Oluwaseun T.'].map((name, i) => (

@@ -1,7 +1,5 @@
 
-const AFRIEX_BASE_URL = 'https://api.afriwallet.io/v1';
-
-// Use secure environment variable
+const AFRIEX_BASE_URL = import.meta.env.VITE_AFRIEX_BASE_URL || 'https://api.afriwallet.io/v1';
 const AFRIEX_SECRET_KEY = import.meta.env.VITE_AFRIEX_SECRET_KEY || 'YOUR_AFRIEX_SECRET_KEY';
 
 export const afriexClient = {

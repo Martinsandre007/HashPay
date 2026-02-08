@@ -25,6 +25,7 @@ import txRoutes from './routes/transactions';
 import contactRoutes from './routes/contacts';
 import notificationRoutes from './routes/notifications';
 import escrowRoutes from './routes/escrow';
+import exchangeRoutes from './routes/exchange';
 
 app.get('/', (req, res) => {
   res.send('HashPay API is running');
@@ -36,12 +37,13 @@ app.use('/api/transactions', txRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/escrow', escrowRoutes);
+app.use('/api/exchange', exchangeRoutes);
 
 // Database Connection and Server Start
 const startServer = async () => {
   try {
     await connectDB();
-    
+
     // Sync models with database
     // alter: true updates the table schema to match the model if it exists
     await sequelize.sync({ alter: true });
