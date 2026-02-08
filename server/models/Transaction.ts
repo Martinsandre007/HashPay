@@ -15,7 +15,7 @@ interface TransactionAttributes {
   external_tx_id?: string;
 }
 
-interface TransactionCreationAttributes extends Optional<TransactionAttributes, 'id' | 'external_tx_id'> { }
+interface TransactionCreationAttributes extends Optional<TransactionAttributes, 'id' | 'external_tx_id' | 'date'> { }
 
 export class Transaction extends Model<TransactionAttributes, TransactionCreationAttributes> implements TransactionAttributes {
   public id!: number;

@@ -24,12 +24,12 @@ export const binanceService = {
             // but we can fetch all or do individual ones. For simplicity and reliability, we'll fetch individual ones in parallel.
             const ratePromises = symbols.map(symbol =>
                 axios.get(`${BINANCE_API_URL}/ticker/price`, { params: { symbol } })
-                    .then(res => ({ symbol: res.data.symbol, price: res.data.price }))
+                    .then((res: any) => ({ symbol: res.data.symbol, price: res.data.price }))
                     .catch(() => ({ symbol, price: '---' })) // Fallback for unsupported pairs
             );
 
             const rates = await Promise.all(ratePromises);
-            return rates.reduce((acc: any, rate) => {
+            return rates.reduce((acc: any, rate: any) => {
                 acc[rate.symbol] = rate.price;
                 return acc;
             }, {});

@@ -22,7 +22,8 @@
     "pg-hstore": "^2.3.4",
     "rimraf": "^6.1.2",
     "sequelize": "^6.37.3",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "axios": "^1.7.2"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
