@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, type FC } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { afriexClient } from '../api/afriex';
 import { useToast } from '../components/Toast';
@@ -10,7 +10,7 @@ interface FiatDashboardScreenProps {
 
 type FiatTab = 'dashboard' | 'accounts' | 'savings' | 'transfers' | 'cards' | 'security';
 
-const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => {
+const FiatDashboardScreen: FC<FiatDashboardScreenProps> = ({ onBack }) => {
     const { showToast } = useToast();
     const [activeTab, setActiveTab] = useState<FiatTab>('dashboard');
     const [fiatData, setFiatData] = useState<any>(null);
@@ -105,7 +105,7 @@ const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => 
             </div>
 
             {/* Account Cards */}
-            <div className="mb-16">
+            <div className="mb-16 px-4">
                 <div className="flex justify-between items-center mb-8 px-2">
                     <h3 className="text-[13px] font-black text-white uppercase tracking-[0.3em]">Your Accounts</h3>
                     <button onClick={() => setActiveTab('accounts')} className="text-[10px] font-black text-primary uppercase tracking-widest hover:underline">View All</button>
@@ -313,7 +313,7 @@ const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => 
                 <button className="px-6 py-3 bg-primary rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-primary/20">New Virtual Card</button>
             </div>
 
-            <div className="grid grid-cols-2 gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 px-4">
                 {cards.map((card, i) => (
                     <div key={i} className="flex flex-col gap-8">
                         <div className="aspect-[1.6/1] bg-gradient-to-br from-[#1a1c1e] to-[#0d121b] rounded-[2.5rem] p-10 border border-white/10 relative overflow-hidden shadow-2xl group flex flex-col justify-between">
@@ -431,12 +431,12 @@ const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => 
                     <h1 className="text-xl font-black tracking-tight font-display">Hashpay Fiat</h1>
                 </div>
 
-                <nav className="flex-1 space-y-2">
+                <nav className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-x-visible gap-2 lg:space-y-2 pb-4 lg:pb-0 scrollbar-hide">
                     {menuItems.map((item, i) => (
                         <button
                             key={i}
                             onClick={() => setActiveTab(item.id as FiatTab)}
-                            className={`w-full flex items-center gap-4 px-4 py-4 rounded-2xl transition-all ${activeTab === item.id ? 'bg-white/10 text-white shadow-xl px-5' : 'text-text-tertiary hover:text-white hover:bg-white/5'}`}
+                            className={`flex-shrink-0 lg:w-full flex items-center gap-4 px-4 py-3 lg:py-4 rounded-2xl transition-all ${activeTab === item.id ? 'bg-white/10 text-white shadow-xl px-5' : 'text-text-tertiary hover:text-white hover:bg-white/5'}`}
                         >
                             <span className={`material-symbols-outlined text-2xl ${activeTab === item.id ? 'text-primary' : ''}`}>{item.icon}</span>
                             <span className="text-[10px] font-black uppercase tracking-widest">{item.label}</span>
@@ -446,7 +446,7 @@ const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => 
 
                 <button
                     onClick={onBack}
-                    className="mt-auto flex items-center gap-4 px-4 py-5 bg-white/5 rounded-2xl text-text-tertiary hover:text-white hover:bg-white/10 transition-all border border-white/5 group"
+                    className="hidden lg:flex mt-auto items-center gap-4 px-4 py-5 bg-white/5 rounded-2xl text-text-tertiary hover:text-white hover:bg-white/10 transition-all border border-white/5 group"
                 >
                     <span className="material-symbols-outlined text-2xl group-hover:-translate-x-1 transition-transform">arrow_back</span>
                     <span className="text-[10px] font-black uppercase tracking-widest">Back to Main</span>
@@ -465,12 +465,12 @@ const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => 
                             className="w-full h-14 pl-16 pr-6 bg-surface-dark/30 border border-white/5 rounded-2xl focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold placeholder:text-gray-700"
                         />
                     </div>
-                    <div className="flex items-center gap-6">
+                    <div className="flex flex-wrap items-center gap-4 lg:gap-6 w-full lg:w-auto">
                         <div className="flex items-center gap-2 px-6 py-3 bg-green-400/10 border border-green-400/20 rounded-full">
                             <span className="material-symbols-outlined text-green-400 text-sm animate-pulse">verified_user</span>
-                            <span className="text-[9px] font-black text-green-400 uppercase tracking-widest">Secure Fiat Session Active</span>
+                            <span className="text-[9px] font-black text-green-400 uppercase tracking-widest">Session Active</span>
                         </div>
-                        <button className="size-14 bg-surface-dark/40 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-surface-elevated transition-all shadow-xl group">
+                        <button className="size-14 bg-surface-dark/40 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-surface-elevated transition-all shadow-xl group ml-auto lg:ml-0">
                             <span className="material-symbols-outlined text-white group-hover:scale-110 transition-transform">notifications</span>
                         </button>
                     </div>
