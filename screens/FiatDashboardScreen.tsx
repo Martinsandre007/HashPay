@@ -64,17 +64,17 @@ const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => 
     const renderDashboard = () => (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
             {/* Dashboard Stats */}
-            <div className="flex gap-12 mb-16">
+            <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 mb-16">
                 <div className="flex-1">
                     <span className="text-[11px] font-black text-text-tertiary uppercase tracking-[0.4em] mb-4 block">Total Balance</span>
-                    <div className="flex items-baseline gap-3 mb-2">
-                        <span className="text-6xl font-black text-white tracking-tighter font-display">₦{fiatData?.total_balance.toLocaleString()}</span>
+                    <div className="flex items-baseline gap-3 mb-2 flex-wrap">
+                        <span className="text-4xl sm:text-6xl font-black text-white tracking-tighter font-display">₦{fiatData?.total_balance.toLocaleString()}</span>
                         <span className="text-sm font-black text-green-400 mt-2">{metrics?.percentage_change}</span>
                     </div>
                     <p className="text-[10px] font-bold text-text-tertiary uppercase tracking-widest italic">Last updated {fiatData?.last_updated}</p>
                 </div>
 
-                <div className="w-[450px] bg-surface-dark/30 rounded-[2.5rem] p-8 border border-white/5 glass relative overflow-hidden flex flex-col justify-center">
+                <div className="w-full lg:w-[450px] bg-surface-dark/30 rounded-[2.5rem] p-6 sm:p-8 border border-white/5 glass relative overflow-hidden flex flex-col justify-center">
                     <div className="flex justify-between items-center mb-6">
                         <span className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Weekly Trend</span>
                         <button className="text-[9px] font-black text-text-tertiary uppercase tracking-widest hover:text-white transition-colors">View Report</button>
@@ -110,8 +110,8 @@ const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => 
                     <h3 className="text-[13px] font-black text-white uppercase tracking-[0.3em]">Your Accounts</h3>
                     <button onClick={() => setActiveTab('accounts')} className="text-[10px] font-black text-primary uppercase tracking-widest hover:underline">View All</button>
                 </div>
-                <div className="grid grid-cols-2 gap-8">
-                    <div className="bg-[#2176ff] rounded-[2.5rem] p-10 shadow-2xl relative overflow-hidden group border border-white/20">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="bg-[#2176ff] rounded-[2.5rem] p-6 sm:p-10 shadow-2xl relative overflow-hidden group border border-white/20">
                         <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-100 transition-opacity">
                             <span className="material-symbols-outlined text-white text-4xl">contactless</span>
                         </div>
@@ -125,7 +125,7 @@ const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => 
                         </div>
                     </div>
 
-                    <div className="bg-surface-dark/30 rounded-[2.5rem] p-10 shadow-2xl border border-white/5 relative overflow-hidden group glass">
+                    <div className="bg-surface-dark/30 rounded-[2.5rem] p-6 sm:p-10 shadow-2xl border border-white/5 relative overflow-hidden group glass">
                         <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-100 transition-opacity">
                             <span className="material-symbols-outlined text-text-tertiary text-4xl">savings</span>
                         </div>
@@ -203,7 +203,7 @@ const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => 
                 <button className="px-6 py-3 bg-primary rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-primary/20">New Goal</button>
             </div>
 
-            <div className="grid grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {goals.map((goal, i) => {
                     const progress = (goal.current / goal.target) * 100;
                     return (
@@ -254,7 +254,7 @@ const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => 
             <div className="flex flex-col lg:flex-row gap-12">
                 <div className="flex-1 lg:flex-[2] flex flex-col gap-8">
                     <div className="bg-surface-dark/30 rounded-[2.5rem] p-10 border border-white/5 glass">
-                        <div className="grid grid-cols-2 gap-8 mb-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                             <div>
                                 <label className="text-[10px] font-black text-text-tertiary uppercase tracking-widest mb-3 block">From Account</label>
                                 <div className="relative">
@@ -409,9 +409,21 @@ const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => 
     };
 
     return (
-        <div className="flex h-screen bg-[#0d121b] text-white font-body overflow-hidden">
+        <div className="flex flex-col md:flex-row h-screen bg-[#0d121b] text-white font-body overflow-hidden">
+            {/* Mobile Header */}
+            <header className="md:hidden flex items-center justify-between p-4 border-b border-white/5 bg-[#0d121b] z-20">
+                <div className="flex items-center gap-3">
+                    <div className="size-8 rounded-lg bg-primary flex items-center justify-center">
+                        <span className="material-symbols-outlined text-white text-xl">account_balance</span>
+                    </div>
+                    <span className="text-sm font-black tracking-tight font-display">Hashpay Fiat</span>
+                </div>
+                <button onClick={onBack} className="p-2 bg-white/5 rounded-lg">
+                    <span className="material-symbols-outlined text-white">close</span>
+                </button>
+            </header>
             {/* Sidebar */}
-            <aside className="w-64 border-r border-white/5 bg-[#0d121b] flex flex-col p-6 h-full">
+            <aside className="hidden md:flex w-64 border-r border-white/5 bg-[#0d121b] flex-col p-6 h-full">
                 <div className="flex items-center gap-3 mb-12 px-2">
                     <div className="size-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
                         <span className="material-symbols-outlined text-white text-2xl font-bold">account_balance</span>
@@ -442,10 +454,10 @@ const FiatDashboardScreen: React.FC<FiatDashboardScreenProps> = ({ onBack }) => 
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-y-auto p-12 custom-scrollbar relative">
+            <main className="flex-1 overflow-y-auto p-6 sm:p-12 custom-scrollbar relative">
                 {/* Top Header */}
-                <header className="flex justify-between items-center mb-16">
-                    <div className="relative group w-96">
+                <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12 sm:mb-16">
+                    <div className="relative group w-full sm:w-96">
                         <span className="absolute left-6 top-1/2 -translate-y-1/2 material-symbols-outlined text-text-tertiary group-focus-within:text-primary transition-colors">search</span>
                         <input
                             type="text"
