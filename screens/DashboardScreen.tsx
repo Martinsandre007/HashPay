@@ -182,7 +182,11 @@ const DashboardScreen: FC<DashboardScreenProps> = ({ onNavigate }) => {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {transactions.slice(0, 4).map((tx, i) => (
-              <div key={i} className="flex items-center justify-between p-6 bg-surface-dark/20 rounded-[2rem] border border-white/5 hover:bg-surface-dark/40 hover:border-white/10 transition-all group glass">
+              <div
+                key={i}
+                onClick={() => showToast(`Transaction Details: ${tx.amount} ${tx.currency} to ${tx.recipient}`, 'info')}
+                className="flex items-center justify-between p-6 bg-surface-dark/20 rounded-[2rem] border border-white/5 hover:bg-surface-dark/40 hover:border-white/10 transition-all group glass cursor-pointer active:scale-[0.98]"
+              >
                 <div className="flex items-center gap-5">
                   <div className={`size-12 rounded-xl flex items-center justify-center shadow-lg ${tx.type === 'sent' ? 'bg-error-bg text-error' : 'bg-success-bg text-success'} border border-white/5`}>
                     <span className="material-symbols-outlined text-xl">{tx.type === 'sent' ? 'north_east' : 'south_west'}</span>

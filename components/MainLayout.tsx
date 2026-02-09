@@ -41,12 +41,12 @@ const MainLayout: FC<MainLayoutProps> = ({ children, currentScreen, onNavigate, 
             <button
               key={item.screen}
               onClick={() => onNavigate(item.screen)}
-              className={`w - full flex items - center gap - 4 px - 4 py - 4 rounded - 2xl transition - all ${currentScreen === item.screen
-                  ? 'bg-primary/10 text-white shadow-xl'
-                  : 'text-text-tertiary hover:text-white hover:bg-white/5'
+              className={`w-full flex items-center gap-4 px-4 py-4 rounded-2xl transition-all ${currentScreen === item.screen
+                ? 'bg-primary/10 text-white shadow-xl'
+                : 'text-text-tertiary hover:text-white hover:bg-white/5'
                 } `}
             >
-              <span className={`material - symbols - outlined text - 2xl ${currentScreen === item.screen ? 'text-primary font-fill' : ''} `}>
+              <span className={`material-symbols-outlined text-2xl ${currentScreen === item.screen ? 'text-primary font-fill' : ''} `}>
                 {item.icon}
               </span>
               <span className="text-[10px] font-black uppercase tracking-widest">{item.label}</span>
@@ -82,11 +82,11 @@ const MainLayout: FC<MainLayoutProps> = ({ children, currentScreen, onNavigate, 
                 <button
                   key={item.screen}
                   onClick={() => onNavigate(item.screen)}
-                  className={`flex flex - col items - center gap - 1.5 min - w - [64px] transition - all active: scale - 95 ${isActive ? 'text-primary' : 'text-text-tertiary'
+                  className={`flex flex-col items-center gap-1.5 min-w-[64px] transition-all active:scale-95 ${isActive ? 'text-primary' : 'text-text-tertiary'
                     } `}
                 >
                   <div className={`relative ${isActive ? 'scale-110' : ''} `}>
-                    <span className={`material - symbols - outlined text - [26px] ${isActive ? 'font-fill' : 'opacity-60'} `}>
+                    <span className={`material-symbols-outlined text-[26px] ${isActive ? 'font-fill' : 'opacity-60'} `}>
                       {item.icon}
                     </span>
                   </div>

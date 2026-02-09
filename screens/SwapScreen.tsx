@@ -49,8 +49,16 @@ const SwapScreen: React.FC<SwapScreenProps> = ({ onBack }) => {
     setToAsset(temp);
   };
 
+  const [showHistory, setShowHistory] = useState(false);
   const [showAssetModal, setShowAssetModal] = useState<'from' | 'to' | null>(null);
   const [useMesh, setUseMesh] = useState(false);
+
+  // Mock History Data
+  const swapHistory = [
+    { id: '1', date: 'Today, 10:23 AM', from: 'SUI', to: 'USDC', amountIn: '100', amountOut: '145.20', status: 'Completed' },
+    { id: '2', date: 'Yesterday, 4:15 PM', from: 'USDC', to: 'BTC', amountIn: '500', amountOut: '0.012', status: 'Completed' },
+    { id: '3', date: 'Feb 8, 9:00 AM', from: 'ETH', to: 'SUI', amountIn: '0.5', amountOut: '1250', status: 'Failed' },
+  ];
 
   // Mock assets list derived from prices keys
   const assetsList = Object.keys(prices).map(symbol => ({
@@ -66,12 +74,13 @@ const SwapScreen: React.FC<SwapScreenProps> = ({ onBack }) => {
           <span className="material-symbols-outlined text-2xl">arrow_back</span>
         </button>
         <h1 className="text-xl font-black leading-tight tracking-tight uppercase tracking-widest text-primary-light">Swap Assets</h1>
-        <button onClick={() => showToast('Swap history coming soon!', 'info')} className="flex items-center justify-center size-11 rounded-2xl bg-white/5 hover:bg-white/10 transition-all active:scale-90 text-gray-400 shadow-lg border border-white/5">
+        <button onClick={() => setShowHistory(true)} className="flex items-center justify-center size-11 rounded-2xl bg-white/5 hover:bg-white/10 transition-all active:scale-90 text-gray-400 shadow-lg border border-white/5">
           <span className="material-symbols-outlined text-2xl">history</span>
         </button>
       </header>
 
       <main className="flex-1 p-6 flex flex-col gap-6 max-w-sm mx-auto w-full pt-10">
+        {/* ... existing main content ... */}
         <div className="relative flex flex-col gap-2">
           {/* From Section */}
           <div className="bg-surface-dark/40 border border-white/10 rounded-[2.5rem] p-6 flex flex-col gap-4 shadow-xl">
@@ -218,6 +227,51 @@ const SwapScreen: React.FC<SwapScreenProps> = ({ onBack }) => {
                   <p className="font-bold text-white text-sm">{asset.balance}</p>
                 </button>
               ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* History Modal */}
+      {showHistory && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4 animate-fade-in">
+          <div className="bg-[#0d121b] border border-white/10 rounded-[2rem] p-6 w-full max-w-sm h-[70vh] flex flex-col shadow-2xl animate-slide-up">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center gap-3">
+                <div className="size-10 rounded-xl bg-white/5 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-gray-400">history</span>
+                </div>
+                <h3 className="text-lg font-black uppercase tracking-widest text-white">Swap History</h3>
+              </div>
+              <button onClick={() => setShowHistory(false)} className="p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors">
+                <span className="material-symbols-outlined text-white">close</span>
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-3">
+              {swapHistory.map(item => (
+                <div key={item.id} className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all group">
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{item.date}</span>
+                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-md ${item.status === 'Completed' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+                      {item.status}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-black text-white">{item.from}</span>
+                      <span className="material-symbols-outlined text-xs text-gray-500">arrow_forward</span>
+                      <span className="text-sm font-black text-white">{item.to}</span>
+                    </div>
+                    <span className="text-xs font-bold text-gray-300">
+                      {item.amountIn} &rarr; {item.amountOut}
+                    </span>
+                  </div>
+                </div>
+              ))}
+              <div className="mt-auto pt-6 text-center">
+                <button className="text-[10px] font-bold text-red-500 uppercase tracking-widest hover:text-red-400 transition-colors">Clear History</button>
+              </div>
             </div>
           </div>
         </div>
