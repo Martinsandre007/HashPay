@@ -10,7 +10,7 @@ interface MainLayoutProps {
     hideNav?: boolean;
 }
 
-const MainLayout: FC<MainLayoutProps> = ({ children, currentScreen, onNavigate, hideNav = false }) => {
+const AppLayout: FC<MainLayoutProps> = ({ children, currentScreen, onNavigate, hideNav = false }) => {
     const isPublicScreen = [AppScreen.SPLASH, AppScreen.ONBOARDING, AppScreen.AUTH].includes(currentScreen);
 
     if (isPublicScreen || hideNav) {
@@ -101,4 +101,4 @@ const MainLayout: FC<MainLayoutProps> = ({ children, currentScreen, onNavigate, 
     );
 };
 
-export default MainLayout;
+export default AppLayout;
