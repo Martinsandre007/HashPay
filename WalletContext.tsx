@@ -672,7 +672,7 @@ export const WalletProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       addTransaction,
       sendFunds,
       wallets,
-      totalFiatValue: `$${balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+      totalFiatValue: `${balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
       userProfile,
       updateUserProfile,
       appSettings,
