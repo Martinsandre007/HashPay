@@ -178,7 +178,12 @@ const DashboardScreen: FC<DashboardScreenProps> = ({ onNavigate }) => {
         <motion.section variants={itemVariants} className="px-6 pb-20 lg:pb-10">
           <div className="flex justify-between items-center mb-8 px-2">
             <h3 className="text-[11px] font-black text-text-tertiary uppercase tracking-[0.4em]">Recent Activity</h3>
-            <button className="text-[10px] font-black uppercase text-primary tracking-widest hover:text-primary-light transition-colors">View All</button>
+            <button
+              onClick={() => onNavigate(AppScreen.TRANSACTION_HISTORY)}
+              className="text-[10px] font-black uppercase text-primary tracking-widest hover:text-primary-light transition-colors"
+            >
+              View All
+            </button>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {transactions.slice(0, 4).map((tx, i) => (

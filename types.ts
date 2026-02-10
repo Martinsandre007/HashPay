@@ -7,6 +7,7 @@ export enum AppScreen {
   SEND = 'send',
   RECEIVE = 'receive',
   TRANSACTION_DETAILS = 'transaction_details',
+  TRANSACTION_HISTORY = 'transaction_history',
   ESCROW = 'escrow',
   VOICE_ASSISTANT = 'voice_assistant',
   SETTINGS = 'settings',
