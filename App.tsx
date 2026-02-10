@@ -25,6 +25,7 @@ import NetworkSettingsScreen from './screens/NetworkSettingsScreen';
 import FiatDashboardScreen from './screens/FiatDashboardScreen';
 import KYCScreen from './screens/KYCScreen';
 import ExchangeScreen from './screens/ExchangeScreen';
+import TransactionHistoryScreen from './screens/TransactionHistoryScreen';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useWallet } from './WalletContext';
 import MainLayout from './components/MainLayout';
@@ -77,6 +78,11 @@ const App: FC = () => {
         return <ReceiveScreen onBack={() => setCurrentScreen(AppScreen.DASHBOARD)} />;
       case AppScreen.TRANSACTION_DETAILS:
         return <TransactionDetailsScreen onBack={() => setCurrentScreen(AppScreen.DASHBOARD)} />;
+      case AppScreen.TRANSACTION_HISTORY:
+        return <TransactionHistoryScreen
+          onBack={() => setCurrentScreen(AppScreen.DASHBOARD)}
+          onNavigate={(screen) => setCurrentScreen(screen)}
+        />;
       case AppScreen.ESCROW:
         return <EscrowScreen onBack={() => setCurrentScreen(AppScreen.DASHBOARD)} />;
       case AppScreen.VOICE_ASSISTANT:
