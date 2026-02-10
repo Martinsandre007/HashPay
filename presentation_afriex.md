@@ -88,3 +88,13 @@ To demonstrate HashPay not just as a wallet, but as the **ultimate interface for
 2.  **Volume Up**: If showcasing any sound effects.
 3.  **Do Not Disturb**: Turn off phone notifications if mirroring.
 4.  **Network**: Ensure you are on the correct Wifi/Hotspot.
+
+---
+
+## 📝 Demo Cheat Sheet (Copy-Paste Ready)
+
+### 🔹 Mock Sui Address (Recipient)
+`0xa1b2c3d4e5f678901234567890abcdef1234567890abcdef1234567890abcdef`
+
+### 🔹 Mock Afriex Tag
+`@hashpay_demo` or `+234 800 123 4567`
