@@ -1,0 +1,8 @@
+{
+  "name": "XODUS Protocol",
+  "description": "A high-fidelity cyberpunk tactical management and operative dashboard featuring multi-sector control, asset management, and neural link simulations.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
