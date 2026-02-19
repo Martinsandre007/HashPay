@@ -9,12 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
     "@google/generative-ai": "latest",
-    "@mysten/sui": "latest",
     "@mysten/dapp-kit": "latest",
-    "@tanstack/react-query": "latest"
+    "@mysten/sui": "latest",
+    "@tanstack/react-query": "latest",
+    "framer-motion": "^11.18.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

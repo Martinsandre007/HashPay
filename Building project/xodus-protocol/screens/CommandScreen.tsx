@@ -1,14 +1,29 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Sector, MapEvent } from '../types';
 import MissionModal, { MissionDetail } from '../components/MissionModal';
 import { useGame } from '../GameContext';
 import { generateMission } from '../MissionGenerator';
+import { useDeviceMotion } from '../hooks/useDeviceMotion';
 
 const CommandScreen: React.FC = () => {
   const { state, navigateTo, updateState, updateRotation } = useGame();
   const { activeEvents, scanRotation } = state;
   const [selectedMission, setSelectedMission] = useState<MissionDetail | null>(null);
+  const motionData = useDeviceMotion();
+
+  // Character Motion: Operative Position
+  const [operativePos, setOperativePos] = useState({ x: 50, y: 50 });
+
+  const handleGridClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Only move if we didn't click an event
+    if ((e.target as HTMLElement).closest('.map-event')) return;
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setOperativePos({ x, y });
+  };
 
   // Simulate radar sweep and event spawning
   useEffect(() => {
@@ -152,14 +167,31 @@ const CommandScreen: React.FC = () => {
 
       {/* Map View */}
       <main className="flex-1 p-4 relative overflow-hidden flex flex-col">
-        <div className="flex-1 relative bg-surface-dark border border-primary/20 rounded-xl overflow-hidden group shadow-[inset_0_0_100px_rgba(0,0,0,0.8)]">
+        <div
+          onClick={handleGridClick}
+          className="flex-1 relative bg-surface-dark border border-primary/20 rounded-xl overflow-hidden group shadow-[inset_0_0_100px_rgba(0,0,0,0.8)] cursor-crosshair"
+        >
 
-          {/* Coordinate Grid Overlay */}
-          <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'linear-gradient(#f2b90d 1px, transparent 1px), linear-gradient(90deg, #f2b90d 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+          {/* Coordinate Grid Overlay with Parallax */}
+          <motion.div
+            animate={{
+              x: motionData.x * -15,
+              y: motionData.y * -15
+            }}
+            className="absolute inset-[-10%] opacity-10 pointer-events-none"
+            style={{
+              backgroundImage: 'linear-gradient(#f2b90d 1px, transparent 1px), linear-gradient(90deg, #f2b90d 1px, transparent 1px)',
+              backgroundSize: '40px 40px'
+            }}
+          />
 
-          <img
+          <motion.img
+            animate={{
+              x: motionData.x * -8,
+              y: motionData.y * -8
+            }}
             alt="Map"
-            className="w-full h-full object-cover grayscale opacity-30 mix-blend-screen contrast-125 scale-110"
+            className="absolute inset-[-5%] w-[110%] h-[110%] object-cover grayscale opacity-30 mix-blend-screen contrast-125 scale-110"
             style={{ filter: 'sepia(1) saturate(5) hue-rotate(10deg)' }}
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDgMgwFoWjV2MzSe56j5nHstrzoK4WkKy-ZkNV9ZocGS6EtHFzLm9_ScaosTqe00vgzzzCrvUZIeOHFEUuPMfk1bI_quhnfnbnBTJz5nQbezDeuzeQ0v5dM8PBQU9RrOls3BAK3Wwwn-XKKK8lvDVLFSqanVxZKyR_4WVx6J8M647rzOAUlbRq6cEq0gFCi7V9qo9NgXylQQOSaVWMpj0m9KXtkvq1LfuncjkSr_Me19MLSub8Zo4Nlr1OQw7USKACrDBfy2BFZZA"
           />
@@ -182,40 +214,64 @@ const CommandScreen: React.FC = () => {
               </div>
             </div>
 
-            {/* Dynamic Map Events with Visual Decay */}
-            {activeEvents.map(event => {
-              // Calculate visual decay styles
-              const isExpiring = event.ttl <= 10;
-              const isCritical = event.ttl <= 5;
-              const opacity = isExpiring ? Math.max(0.1, event.ttl / 10) : 1;
-              const scale = isCritical ? Math.max(0.7, 0.7 + (event.ttl / 5) * 0.3) : 1;
-
-              return (
-                <div
+            {/* Dynamic Map Events with Visual Decay and Parallax */}
+            <AnimatePresence>
+              {activeEvents.map(event => (
+                <motion.div
                   key={event.id}
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{
+                    opacity: event.ttl <= 10 ? Math.max(0.1, event.ttl / 10) : 1,
+                    scale: event.ttl <= 5 ? Math.max(0.7, 0.7 + (event.ttl / 5) * 0.3) : 1,
+                    x: motionData.x * 15,
+                    y: motionData.y * 15
+                  }}
+                  exit={{ opacity: 0, scale: 0 }}
                   onClick={() => handleEventClick(event)}
-                  className="absolute cursor-pointer group transition-all duration-1000"
+                  className="absolute cursor-pointer group map-event"
                   style={{
                     left: `${event.x}%`,
                     top: `${event.y}%`,
-                    opacity: opacity,
-                    transform: `translate(-50%, -50%) scale(${scale})`,
+                    transform: 'translate(-50%, -50%)',
                   }}
                 >
                   <div className={`relative flex flex-col items-center`}>
                     <div className={`size-3 rounded-full animate-ping absolute ${event.type === 'hostile' ? 'bg-red-500' : event.type === 'distress' ? 'bg-cyan-500' : 'bg-yellow-500'}`} />
-                    <div className={`size-3 rounded-full ring-2 ring-offset-2 ring-offset-black relative shadow-lg ${event.type === 'hostile' ? 'bg-red-600 ring-red-500' : event.type === 'distress' ? 'bg-cyan-600 ring-cyan-500' : 'bg-yellow-600 ring-yellow-500'} ${isCritical ? 'animate-pulse' : ''}`} />
+                    <div className={`size-3 rounded-full ring-2 ring-offset-2 ring-offset-black relative shadow-lg ${event.type === 'hostile' ? 'bg-red-600 ring-red-500' : event.type === 'distress' ? 'bg-cyan-600 ring-cyan-500' : 'bg-yellow-600 ring-yellow-500'} ${event.ttl <= 5 ? 'animate-pulse' : ''}`} />
 
-                    <div className={`mt-2 bg-black/90 border border-primary/20 px-2 py-0.5 rounded backdrop-blur-md scale-75 origin-top group-hover:scale-100 transition-all duration-300 ${isCritical ? 'border-red-500/40' : ''}`}>
+                    <div className={`mt-2 bg-black/90 border border-primary/20 px-2 py-0.5 rounded backdrop-blur-md scale-75 origin-top group-hover:scale-100 transition-all duration-300 ${event.ttl <= 5 ? 'border-red-500/40' : ''}`}>
                       <p className={`text-[8px] font-black uppercase whitespace-nowrap ${event.type === 'hostile' ? 'text-red-500' : event.type === 'distress' ? 'text-cyan-500' : 'text-yellow-500'}`}>
                         {event.label}
-                        {isCritical && <span className="ml-1 text-[7px] animate-pulse opacity-60">!!</span>}
+                        {event.ttl <= 5 && <span className="ml-1 text-[7px] animate-pulse opacity-60">!!</span>}
                       </p>
                     </div>
                   </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+
+            {/* Character Motion: Player Operative */}
+            <motion.div
+              animate={{
+                left: `${operativePos.x}%`,
+                top: `${operativePos.y}%`,
+                x: motionData.x * 25,
+                y: motionData.y * 25
+              }}
+              transition={{ type: "spring", stiffness: 50, damping: 15 }}
+              className="absolute pointer-events-none z-20"
+              style={{ transform: 'translate(-50%, -50%)' }}
+            >
+              <div className="relative flex flex-col items-center">
+                <div className="size-8 border-2 border-primary rounded-full animate-[spin_4s_linear_infinite] opacity-30" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                  <span className="material-symbols-outlined text-primary text-xl glow-text">person_pin_circle</span>
                 </div>
-              );
-            })}
+                <div className="mt-1 bg-primary text-black text-[7px] font-black px-1.5 py-0.5 uppercase tracking-tighter rounded">
+                  OPERATIVE_ALPHA
+                </div>
+              </div>
+            </motion.div>
 
             <div className="grid grid-cols-2 gap-3 relative z-10">
               <div className="bg-black/80 border-l-4 border-primary p-3 rounded backdrop-blur-md cursor-pointer hover:bg-primary/10 transition-colors">

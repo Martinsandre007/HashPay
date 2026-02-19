@@ -1,23 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
-import { Sector } from './types';
-import LandingScreen from './screens/LandingScreen';
-import CommandScreen from './screens/CommandScreen';
-import RegistrationScreen from './screens/RegistrationScreen';
-import DossierScreen from './screens/DossierScreen';
-import LobbyScreen from './screens/LobbyScreen';
-import ForgeScreen from './screens/ForgeScreen';
-import LoungeScreen from './screens/LoungeScreen';
-import DenScreen from './screens/DenScreen';
-import SafehouseScreen from './screens/SafehouseScreen';
-import ProfileScreen from './screens/ProfileScreen';
-import HUDScreen from './screens/HUDScreen';
-import MasteryScreen from './screens/MasteryScreen';
-import ResultScreen from './screens/ResultScreen';
-import WalletScreen from './screens/WalletScreen';
-import ArcadeScreen from './screens/ArcadeScreen';
-import MarketScreen from './screens/MarketScreen';
-import { GameProvider, useGame } from './GameContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const AppContent: React.FC = () => {
   const { state, navigateTo } = useGame();
@@ -46,10 +27,19 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background-dark text-white flex flex-col font-display relative">
-      <div className="flex-1 flex flex-col">
-        {renderSector()}
-      </div>
+    <div className="min-h-screen bg-background-dark text-white flex flex-col font-display relative overflow-hidden">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentSector}
+          initial={{ opacity: 0, scale: 0.98, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+          exit={{ opacity: 0, scale: 1.02, filter: 'blur(10px)' }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="flex-1 flex flex-col"
+        >
+          {renderSector()}
+        </motion.div>
+      </AnimatePresence>
 
       {![Sector.LANDING, Sector.HUD, Sector.RESULT].includes(currentSector) && (
         <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background-dark/95 border-t border-primary/20 backdrop-blur-xl px-4 py-3 flex items-center justify-around">
